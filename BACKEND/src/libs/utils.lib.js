@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 export let generateToken = (userId, res) => {
     // Generate JWT token
-    const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign({ userId }, process.env.JWTSECRET, { expiresIn: "7d" });
 
     // Set JWT token as a cookie in the response
     res.cookie("jwt", token, {
