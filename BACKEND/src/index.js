@@ -18,10 +18,21 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser())
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://yappr-mern-chat-web-app.vercel.app"
+];
+
 app.use(cors({
-    origin:"",
-    credentials:true
-}))
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
+}));
 app.use("/api/auth", route);
 app.use("/api/message", messageRoute);
 
