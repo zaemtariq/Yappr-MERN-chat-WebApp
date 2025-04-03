@@ -22,7 +22,7 @@ app.use(
 );
 
 app.use("/api/auth", route);
-app.use("/api/messages", messageRoute);
+app.use("/api/message", messageRoute);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../FRONTEND/dist")));
