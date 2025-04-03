@@ -17,9 +17,6 @@ const Sidebar = () => {
     getUsers();
   }, [getUsers]);
 
-  // const filteredUsers = showOnlineOnly
-  //   ? users.filter((user) => onlineUsers.includes(user._id))
-  //   : users;
   const filteredOnlineUsers = users.filter((user) => onlineUsers.includes(user._id))
 
   if (isUsersLoading) return <SideBarSkeleton />;
