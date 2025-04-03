@@ -9,43 +9,30 @@ import bodyParser from "body-parser";
 import { app,server } from "./libs/socket.js";
 import path from "path";
 dotenv.config();
-
-
-
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
-app.use(express.json());
-
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser())
-const allowedOrigins = [
-    "http://localhost:5173",
-    "https://yappr-mern-chat-webapp.onrender.com"
-];
-
-app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    credentials: true
-}));
-app.use("/api/auth", route);
-app.use("/api/message", messageRoute);
-
-connectMongoDB();
+const PORT = process.env.PORT;
 const __dirname = path.resolve();
-if(process.env.NODE_ENV =="production")
-{
-    app.use(express.static(path.join(__dirname,"../FRONTEND/dist")))
-    app.get("*",(req,res)=>{
-        res.sendFile(path.join(__dirname,"../FRONTEND","dist","index.html"));
-    })
+
+app.use(express.json());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+
+app.use("/api/auth", route);
+app.use("/api/messages", messageRoute);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+  });
 }
-const Port = process.env.PORT;
-server.listen(Port, () => {
-    console.log("Server is running on " + Port);
+
+server.listen(PORT, () => {
+  console.log("server is running on PORT:" + PORT);
+  connectMongoDB();
 });
